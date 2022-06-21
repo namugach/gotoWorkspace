@@ -602,5 +602,5 @@ main $1 $2 $3 $4 $5
 
 
 #version    : gotoWorkspace v0.1.3
-#developer  : TheName
-#github     : https://github.com/hgs-github/gotoWorkspace
+#developer  : namugach
+#github     : https://github.com/namugach/gotoWorkspace
