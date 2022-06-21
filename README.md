@@ -261,6 +261,6 @@
 ## etc
 	version    : gotoWorkspace v0.1.3
 	developer  : TheName
-	github     : https://github.com/hgs-github/gotoWorkspace
+	github     : https://github.com/namugach/gotoWorkspace
 	thanks     : F(진지), dhtmdgkr123(Matas)[엄청]
 	
