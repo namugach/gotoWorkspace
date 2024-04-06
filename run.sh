@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 #보기, 쓰기, 수정, 삭제
 
@@ -15,11 +15,11 @@
 
 ##############################전역변수
 
-path=$(dirname $(echo $BASH_SOURCE)) # by F
+_path="${0:A:h}"
 
-list=$path/list
+list=$_path/list
 
-select=$path/select
+select=$_path/select
 selectValue=`cat $select`
 
 targetPath=""
@@ -60,10 +60,10 @@ function showList() {
 	  for elem in `cat $list`
 	  do
 	    ((num++))
-	    if [ $# == 0 ]; then
+	    if [ $# -eq 0 ]; then
 		    echo $num. $elem
 	    else
-		if [ $elem == $1 ] && [ -n $1 ]; then
+		if [ $elem = $1 -a -n $1 ]; then
 			echo $num. $elem "<---"
 		else
 			echo $num. $elem
@@ -82,7 +82,7 @@ function findArrList() {
 	local num=0
 	for elem in ${arrShowList[@]}
 	do
-		if [ $elem == $1 ]; then
+		if [ $elem = $1 ]; then
 			find=$num
 			break
 		else
@@ -107,10 +107,10 @@ function listSelecter() {
 		return 1
 
 
-	elif [ `numberFilter $1` == true ]; then
+	elif [ `numberFilter $1` = true ]; then
 		# 성공했을 때
 		if [ ${#arrShowList[@]} -gt `expr $1 - 1` ]; then
-			local i=`expr $1 - 1`
+			local i=`expr $1`
 			echo ${arrShowList[$i]}
 			return 2
 
@@ -269,7 +269,7 @@ function UnpredictableError() {
 function gotoSelected() {
 		#showList $selectValue
 
-		cd $(echo $(cat $path/select))
+		cd $(echo $(cat $_path/select))
 		echo "$selectValue 로 이동했습니다."
 }
 
@@ -301,11 +301,11 @@ function gotoIndex() {
 
 
 function gotoRun() {
-	if [ $# == 0 ]; then
+	if [ $# -eq 0 ]; then
 		startMessage
 
-	elif [ $# == 1 ]; then
-		if [ $1 == 0 ] || [ $1 == "root" ] || [ $1 == "r" ]; then
+	elif [ $# -eq 1 ]; then
+		if [ $1 -eq 0 -o $1 = "root" -o $1 = "r" ]; then
 			gotoSelected
 		else
 			gotoIndex $1
@@ -327,7 +327,7 @@ function addList() {
 		notFountAddListValueMessage
 
 	else
-		if [ `findArrList $1` == false ] || [ ${#arrShowList[@]} -eq 0 ]; then
+		if [ `findArrList $1` = false -o ${#arrShowList[@]} -eq 0 ]; then
 			echo $1 >> $list
 			line
 			echo "$1를 리스트에 항목을 추가함"
@@ -362,7 +362,7 @@ function editList() {
 			echo "바꿀 내용을 입력 해야함"
 
 		else
-			if [ `findArrList $2` == false ]; then
+			if [ `findArrList $2` = false ]; then
 				line
 				echo -e "###수정###\n$listSelecter\n▼ (수정성공)▼ \n$2"
 				grep -nx $listSelecter $list | cut -d ':' -f1 | xargs -i sed -i '{} c '$2 $list
@@ -373,7 +373,7 @@ function editList() {
 			else
 				local findArrListNum=`findArrList $2`
 				line
-				echo -e "${arrShowList[` expr $1 - 1`]} \n▽ (수정실패)▽ \n$2"
+				echo -e "${arrShowList[` expr $1`]} \n▽ (수정실패)▽ \n$2"
 				echo `expr $findArrListNum + 1` "번에 값이 존재함"
 				line
 				showList ${arrShowList[findArrListNum]}
@@ -431,7 +431,7 @@ function delList() {
 		line
 
 	elif [ $listSelecterReturn -eq 4 ]; then
-		if [ $1 == "-a" ] || [ $1 == "-all" ]; then
+		if [ $1 = "-a" -o $1 = "-all" ]; then
 			delAllList
 
 		else
@@ -454,27 +454,27 @@ function listRun() {
 		listArgumentsNotFoundMessage
 		showList $selectValue
 
-	elif [ $2 == "show" ]; then
+	elif [ $2 = "show" ]; then
 		showSelected
 
-	elif [ $2 == "add" ]; then
+	elif [ $2 = "add" ]; then
 		if [ -z $3 ];then
 			addList $3
-		elif [ $3 == "pwd" ] || [ $3 == "this" ]; then
+		elif [ $3 = "pwd" -o $3 = "this" ]; then
 			addList `pwd`
 		else
 			addList $3
 		fi
 
 
-	elif [ $2 == "edit" ]; then
+	elif [ $2 = "edit" ]; then
 		editList $3 $4
 
-	elif [ $2 == "del" ]; then
+	elif [ $2 = "del" ]; then
 		delList $3
 
 
-	elif [ $2 == "-help" ] || [ $2 == "-h" ]; then
+	elif [ $2 = "-help" -o $2 = "-h" ]; then
 		listUseHelpMessage
 	else
 		notFoundOptionMessage
@@ -533,12 +533,12 @@ function selectRun() {
 		selectArgumentsNotFoundMessage
 		showList $selectValue
 
-	elif [ $2 == "show" ]; then
+	elif [ $2 = "show" ]; then
 		showSelected
-	elif [ $2 == "up" ] || [ $2 == "update" ]; then
+	elif [ $2 = "up" -o $2 = "update" ]; then
 		updateSelected $3
 
-	elif [ $2 == "-help" ] || [ $2 == "-h" ]; then
+	elif [ $2 = "-help" -o $2 = "-h" ]; then
 		selectUseHelpMessage
 
 	else
@@ -557,21 +557,21 @@ function selectRun() {
 function main() {
 	arrShowListadd
 
-	if [ $# == 0 ]; then
+	if [ $# -eq 0 ]; then
 		gotoRun
 
-	elif [ `numberFilter $1` == true ] || [ $1 == "root" ] || [ $1 == "r" ]; then
+	elif [ `numberFilter $1` = true -o $1 = "root" -o $1 = "r" ]; then
 		gotoRun $1 $2
 
 
 	elif [ $# -lt 5 ]; then
-		if [ $1 == "list" ]; then
+		if [ $1 = "list" ]; then
 			listRun $1 $2 $3 $4
 
-		elif [ $1 == "select" ] || [ $1 == "sel" ]; then
+		elif [ $1 = "select" -o $1 = "sel" ]; then
 			selectRun $1 $2 $3
 
-		elif [ $1 == "-help" ] || [ $1 == "-h" ]; then
+		elif [ $1 = "-help" -o $1 = "-h" ]; then
 			argumentsLimiterMessage
 			listUseHelpMessage
 			line
