@@ -12,7 +12,7 @@
 
 리눅스 터미널 로그인 시  
 원하는 디렉토리로 자동 이동하고 싶을 때  
-.bachrc파일에 명령어를 따로 추가하지 않고  
+.bashrc파일에 명령어를 따로 추가하지 않고  
 
 이동할 수 있게 해줍니다.  
 
@@ -35,9 +35,9 @@ select는 root 명령어가 수행하여 이동하는 경로를 리스트에서
 		
 
 ### 2.2. 수동설치
-#### 2.2.1. .bachrc 파일에 내용추가	
+#### 2.2.1. .bashrc 파일에 내용추가	
 
-~/.bachrc 파일 하단에 아래의 해당하는 내용을 입력하세요  
+~/.bashrc 파일 하단에 아래의 해당하는 내용을 입력하세요  
 source /gotoWorksapce디렉토리 경로/run.sh root
 
 ```sh
@@ -52,9 +52,9 @@ alias 별명="source /gotoWorksapce디렉토리 경로/run.sh"
 alias goto="source /home/user/gotoWorksapce/run.sh"
 ```
 
-#### 2.2.3. .bachrc .profile의 변경된 사항 시스템에 적용하기
+#### 2.2.3. .bashrc .profile의 변경된 사항 시스템에 적용하기
 ```sh
-source ~/.bachrc
+source ~/.bashrc
 (엔터)
 source ~/.profile
 (엔터)
