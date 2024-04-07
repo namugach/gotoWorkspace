@@ -46,7 +46,11 @@ function arrShowListadd() {
 }
 
 
-
+getColorText() {
+	local color="$1"
+	local content="$2"
+	echo -e "${content}${color}\033[0m"
+}
 
 function showList() {
 	local num=0
@@ -63,7 +67,8 @@ function showList() {
 		    echo $num. $elem
 	    else
 		if [ $elem = $1 -a -n $1 ]; then
-			echo $num. $elem "<---"
+			echo $num. $(getColorText "$elem" "\033[32m") $(getColorText "<---" "\033[31m")
+			
 		else
 			echo $num. $elem
 		fi
