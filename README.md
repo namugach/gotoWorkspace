@@ -1,44 +1,42 @@
 ## 1.설명
-이 프로그램은  
-자주 쓰는 디렉토리 경로를 추가하여 저장해두고  
-이동할 수 있게 해주는 도우미 프로그램입니다.  
+디렉토리 경로 관리 유틸 
 
+### 기본
+- 경로 추가시 추가된 순서대로 번호 생성.
+- 단축 번호 지정해서 빠르세 디렉토리 체인지
+- 최초 로그인시 지정된 디렉토리로 자동 이동
 
-먼저 디렉토리 경로를 추가하여 저장하면  
-추가된 순서대로 번호가 생성됩니다.  
-
-생성된 번호를 지정해서   
-빠르게 디렉토리 체인지를 할 수 있으며  
-
-리눅스 터미널 로그인 시  
-원하는 디렉토리로 자동 이동하고 싶을 때  
-.bashrc파일에 명령어를 따로 추가하지 않고  
-
-이동할 수 있게 해줍니다.  
-
-크게 root, list, select, -help 등의 명령어로 이루어졌고,  
-list는 보기, 추가, 수정, 삭제 등을 할 수 있으며,  
-select는 root 명령어가 수행하여 이동하는 경로를 리스트에서  
-확인, 수정할 수 있는 기능으로 이뤄졌습니다.
-
-자세한 사항은 아래의 안내서에서 확인하세요.
-
+### 옵션
+- root: 지정된 기본 위치
+- list: 보기, 추가, 수정, 삭제
+- select: root 지정
+- -help
 ---
 
 ## 2.설치
 
 
 ### 2.1. install.sh
-- 다운로드 받은 파일이 있는 곳에서 source install.sh 를 입력합니다.
-- 설치 안내에 따라서 진행합니다.
+> 주의사항
+```
+다운로드 된 디렉토리 안에 들어가서 install 해야하며
+설치하고 디렉토리를 이동하면 경로가 꼬임으로
+설치 할 때, 미리 원하는 디렉토리로 이동하여 설치 할 것.
+```
+> 입력
+```sh
+./install.sh.
+```
+
 
 		
 
 ### 2.2. 수동설치
-#### 2.2.1. .bashrc 파일에 내용추가	
+#### 2.2.1. .bashrc 혹은 .zshrc 파일에 내용추가	
 
-~/.bashrc 파일 하단에 아래의 해당하는 내용을 입력하세요  
-source /gotoWorksapce디렉토리 경로/run.sh root
+~/.bashrc 혹은 .zshrc  
+
+> source /gotoWorksapce디렉토리 경로/run.sh root
 
 ```sh
 source /home/user/gotoWorksapce/run.sh root
@@ -46,8 +44,9 @@ source /home/user/gotoWorksapce/run.sh root
 
 #### 2.2.2. .profile 파일에 내용추가
 
-~/.profile 파일 하단에 아래의 해당하는 내용을 입력하세요.  
-alias 별명="source /gotoWorksapce디렉토리 경로/run.sh"
+~/.profile  
+
+> alias 별명="source /gotoWorksapce디렉토리 경로/run.sh"
 ```sh
 alias goto="source /home/user/gotoWorksapce/run.sh"
 ```
@@ -55,16 +54,18 @@ alias goto="source /home/user/gotoWorksapce/run.sh"
 #### 2.2.3. .bashrc .profile의 변경된 사항 시스템에 적용하기
 ```sh
 source ~/.bashrc
-(엔터)
+# 혹은
+source ~/.zshrc
+
+
 source ~/.profile
-(엔터)
 ```
 ---
 
 ## 3. 사용법
 
-이 프로그램의 최대 인자값은 4개.  
-크게 list, select, root, -help 등의 명령어로 이루어졌습니다.
+- 최대 인자 값: 4
+- 인자 종류: list, select, root, -help
 
 
 ### 3.1. list
