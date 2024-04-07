@@ -222,7 +222,7 @@ function main() {
 
 	echo "
 	version    : gotoWorkspace v0.2.1
-	developer  : TheName
+	developer  : namugach
 	github     : https://github.com/namugach/gotoWorkspace
 	"
 

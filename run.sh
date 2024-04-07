@@ -579,7 +579,7 @@ function main() {
 
 	echo "
 	version    : gotoWorkspace v0.2.1
-	developer  : TheName
+	developer  : namugach
 	github     : https://github.com/namugach/gotoWorkspace
 	github의 README에 더 자세한 설명이 돼있어요 : )
 	"

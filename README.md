@@ -301,6 +301,6 @@ goto 0
 --- 
 ## etc
 	version    : gotoWorkspace v0.2.1
-	developer  : TheName
+	developer  : namugach
 	github     : https://github.com/namugach/gotoWorkspace
 	thanks     : F(진지), dhtmdgkr123(Matas)[엄청]
