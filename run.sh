@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 #보기, 쓰기, 수정, 삭제
 
@@ -14,12 +14,11 @@
 
 
 ##############################전역변수
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
 
-_path="${0:A:h}"
+list=$currentPath/list
 
-list=$_path/list
-
-select=$_path/select
+select=$currentPath/select
 selectValue=`cat $select`
 
 targetPath=""
@@ -269,7 +268,7 @@ function UnpredictableError() {
 function gotoSelected() {
 		#showList $selectValue
 
-		cd $(echo $(cat $_path/select))
+		cd $(echo $(cat $currentPath/select))
 		echo "$selectValue 로 이동했습니다."
 }
 
@@ -281,7 +280,7 @@ function gotoIndex() {
 	listSelecterReturn=$?
 
 	# showList $listSelecter를 cd 밑으로 내리면
-	# "cat: ./list: 그런 파일이나 디렉터리가 없습니다."
+	# "cat: ./list: 그런 파일이나 디렉토리가 없습니다."
 	# 라는 오류가 뜬다.
 	showList $listSelecter
 
@@ -305,7 +304,8 @@ function gotoRun() {
 		startMessage
 
 	elif [ $# -eq 1 ]; then
-		if [ $1 -eq 0 -o $1 = "root" -o $1 = "r" ]; then
+		if [ $1 = 0 ] || [ $1 = "root" ] || [ $1 = "r" ]; then
+			startMessage
 			gotoSelected
 		else
 			gotoIndex $1
@@ -578,9 +578,9 @@ function main() {
 			selectUseHelpMessage
 
 	echo "
-	version    : gotoWorkspace v0.1.3
+	version    : gotoWorkspace v0.2.1
 	developer  : TheName
-	github     : https://github.com/hgs-github/gotoWorkspace
+	github     : https://github.com/namugach/gotoWorkspace
 	github의 README에 더 자세한 설명이 돼있어요 : )
 	"
 
@@ -601,6 +601,16 @@ main $1 $2 $3 $4 $5
 
 
 
-#version    : gotoWorkspace v0.1.3
+#version    : gotoWorkspace v0.2.1
 #developer  : namugach
 #github     : https://github.com/namugach/gotoWorkspace
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath='/home/yeardream4/1.program/gotoWorkspace'

@@ -1,51 +1,47 @@
 #!/bin/bash
-thisPath=$(dirname $(echo $BASH_SOURCE)) #by F
-userHomePath="/home/$USER"
+function getShellName() {
+	parent_pid=$(ps -o ppid= -p $$)
+	parent_name=$(ps -o comm= -p $parent_pid)
+	echo "$parent_name"
+}
 
-bachrc="$userHomePath/.bashrc"
-profile="$userHomePath/.profile"
+function getUserHomePath() {
+	echo "/home/$USER"
+}
 
+function getDotShellrc() {
+	echo .$(getShellName)rc
+}
+
+function getDotShellrfFullPathFile() {
+	echo "$(getUserHomePath)/$(getDotShellrc)"
+}
+
+function getDotProfileFullPathFile() {
+	echo "$(getUserHomePath)/.profile"
+}
+
+function createPrefixGotoPathRegex() {
+	local prefix=$1
+	echo "^$prefix.*gotoWorkspace\/run.sh.*"
+}
 
 function programPath() {
-	if [ $thisPath  == '.' ]; then
+	local _currentPath=$1
+	if [ $currentPath  = '.' ]; then
 		pwd
 	else
-		cd $thisPath
+		cd $currentPath
 		pwd
 	fi
 }
 
-#source /home/user/gotoWorksapce/run.sh root
-function bachrcAddPathSource() {
-	echo "source $(programPath)/run.sh root"
-}
-
-
-# $1 : aliasName
-#alias goto="source /home/user/gotoWorksapce/run.sh"
-function aliasAddPathSource() {
-	if [ -z $1 ]; then
-		echo "source $(programPath)/run.sh"
-
-	else
-		echo "alias $1='source $(programPath)/run.sh'"
-	fi
-
-
-}
 
 
 ##############################메시지
 
 function installStartMessage() {
 	echo "
-	주의사항 :
-		만약 ./install.sh로 입력하셔서
-		이 화면에 진입한것이라면 ctrl + c 를 눌러서
-		작업을 취소하시고
-		source install.sh 입력하셔서 진행하세요.
-
-
 	엔터를 누르면 바로 설치가 시작됩니다.
 	원하시는 사항을 선택해 주세요.
 	설치를 중지하려면 Ctrl+c를 누르세요
@@ -56,59 +52,36 @@ function installStartMessage() {
 
 	"
 }
-function checkExistBashrcAddSourceMessage() {
-	echo "
-	~/.bashrc 파일에
-	$(bachrcAddPathSource)
-	위의 경로가 이미 등록돼 있습니다.
-	추가를 생략하고 다음으로 진행할께요.
-
-	"
-}
 
 function setProfileAddSourceMessage() {
 	echo "
-	이제
+	$(getDotProfileFullPathFile), $(getDotShellrfFullPathFile) 파일에 
+	alias 이름을 goto라고 등록함.
 
-	~/.profile에 alias 이름을 goto라고 등록할꺼에요.
-	이게 마음에 드시면 그냥 엔터를 눌러주시고,
+	이게 마음에 드시면 그냥 엔터를 누르고,
 
 	그게 아니라면 사용하고싶은 alias 이름을 적어주세요.
 
+	참고로 전에 등록된 이름이 있다면 여기서 변경 하면 되고,
+	전에 있던 이름에 덮어 쓰입니다.
 	"
 }
 
-
-function checkExistProfileAddSourceMessage() {
+function completeMessage() {
 	echo "
-	입력하신 $1 값이 이미 ~/.profile에 alias값으로 등록 돼있네요.
-	다른 이름을 입력하세요.
+	작업이 완료 됐습니다.
+	-----------------------------
 
-	"
-}
 
-function checkExistProfileAddSourceUseMessage() {
-	echo "
-	$1 로 ~/.profile에 alias 등록이 가능합니다.
-	사용하시려면 엔터를 누르시고,
-	이름을 다시 정하고 싶으면
+	source $(getDotShellrfFullPathFile)
+	
 
-	'y를 제외한' 아무 키를 입력하신 후 엔터를 누르세요
-	"
-}
-
-function installCompleteMessage() {
-	echo "
-	설치가 끝났습니다.
+	-----------------------------
+	명령창에 위의 명령을 입력하세요
 	"
 
 }
 ##############################기능구현
-
-# .bachrc에 추가할 소스가 등록돼 있는지 중복 검사
-# .profile에 alias 중복 검사,
-#   현제 디렉토리로 된 run.sh 파일이 등록돼 있는지 중복 검사
-
 
 function setInput() {
 	read -p "값을 입력하세요 : " input
@@ -119,161 +92,138 @@ function setInput() {
 	fi
 }
 
-function setBachrcAddPathSource() {
-	echo -e "~/.bashrc에\n $(bachrcAddPathSource)\n 경로를 추가합니다."
-	echo `bachrcAddPathSource` >> $bachrc
+
+function overwrite() {
+	local filePath=$1
+	local search=$2
+	local content=$3
+	sed -i "s|$search|$content|" "$filePath"
 }
 
-function checkExistBashrcAddSource() {
-	echo "
-	~/.bashrc파일에 추가할 문자열을 검사합니다.
-	"
-	local isBashrc=`grep -w $(programPath)/run.sh $bachrc | wc -l`
-
-	if [ $isBashrc == 1 ]; then
-		if [ $1 == "install" ]; then
-			checkExistBashrcAddSourceMessage
-
-		elif [ $1 == "unInstall" ]; then
-
-			echo "~/.bashrc에 $(bachrcAddPathSource)/로 추가돼있는 소스를 제거합니다."
-
-			grep -nx "$(bachrcAddPathSource)" $bachrc | cut -d ':' -f1 | xargs -i sed -i '{} d ' $bachrc
-
-		fi
-
-
-	else
-
-		if [ $1 == "install" ]; then
-			setBachrcAddPathSource
-
-		elif [ $1 == "unInstall" ]; then
-
-			echo "~/.bashrc에 $(programPath)/run.sh로 추가돼있는 소스가 없습니다."
-
-		fi
-
-	fi
-
-}
-
-function setProfileAddPathSource() {
-	echo -e "~/.profile에\n $(aliasAddPathSource $1)\n 경로를 추가합니다."
-	echo `aliasAddPathSource $1` >> $profile
-
+function add() {
+	local filePath="$1"
+	local content=$2
+	echo $content >> $filePath
 }
 
 
-
-# $i : aliasName
-function checkExistProfileAddSource() {
-
-	echo "
-	~/.profile파일에 추가할 문자열을 검사합니다.
-	"
-
-	echo $2
-
-	if [ -z $2 ]; then
-		isAlias=`grep $(aliasAddPathSource) $profile | wc -l`
-		echo "삭제로직"
+function update() {
+	local filePath=$1
+	local search=$2
+	local content=$3
+	if grep -q "$search" "$filePath"; then
+		overwrite "$filePath" "$search" "$content"
 	else
-		isAlias=`grep -w "alias $2" $profile | wc -l`
-		echo "추가로직"
-	fi
-
-	if [ $isAlias == 1 ]; then
-
-
-		if [ $1 == "install" ]; then
-			checkExistProfileAddSourceMessage $2
-			checkExistProfileAddSource $1 "$(setInput "goto")"
-
-		elif [ $1 == "unInstall" ]; then
-
-			echo "~/.profile에 $(aliasAddPathSource) 소스를 제거합니다."
-
-			grep -n "$(aliasAddPathSource)" $profile | cut -d ':' -f1 | xargs -i sed -i '{} d ' $profile
-
-		fi
-
-	else
-
-		if [ $1 == "install" ]; then
-			checkExistProfileAddSourceUseMessage $2
-
-			if [ `setInput "y"`  == "y" ]; then
-
-
-				setProfileAddPathSource $2
-				installCompleteMessage
-
-			else
-				echo -e "\n이름을 다시 정의합니다. 사용하고싶은 alias 이름을 적어주세요.\n"
-				checkExistProfileAddSource $1 "$(setInput "goto")"
-			fi
-
-		elif [ $1 == "unInstall" ]; then
-
-			echo "~/.profile에 $(aliasAddPathSource)로 추가돼있는 소스가 없습니다."
-
-		fi
+		add "$filePath" "$content"
 	fi
 }
 
+function delete() {
+	local filePath=$1
+	local search=$2
+	update "$filePath" "$search" ""
+}
 
+function createAliasPath() {
+	echo "alias $1='source $(programPath)/run.sh'"
+}
+
+
+function setAslias() {
+	local filePath=$1
+	local search=$2
+	local content=`createAliasPath $3`
+	update "$filePath" "$search" "$content"
+}
+
+
+
+
+function getRunPath() {
+	echo "source $(programPath)/run.sh root"
+}
+
+function setShellrcRun() {
+	local filePath=$1
+	local search=$2
+	local content=$(getRunPath)
+	update "$filePath" "$search" "$content"
+}
+
+
+
+function setRunPath() {
+	local _currentPath=$1
+	update "$_currentPath/run.sh" "currentPath=.*" "currentPath='$_currentPath'"
+}
+
+function setSelect() {
+	echo $(getUserHomePath) > $currentPath/select
+}
 
 ##############################main
 
 function main() {
 
+	local isInstallFile=`ls | grep "run.sh"`
+
+	if [ $isInstallFile = "run.sh" ]; then
+		# alias_key 덮어쓰기
+
+		# .shellrc 추가, 덮어쓰기, alias_key에 의한 삭제
+		# - alias, source
+
+		# .prifile 추가, 덮어쓰기, alias_key에 의한 삭제
+		# - alias
+
+		# run.sh 추가, 덮어쓰기
+		# - currentPath
+
+		# 경로, 파일명, 위치
+
+		local currentPath="$(pwd)"
+
+		local shellrc="$(getDotShellrfFullPathFile)"
+		local profile="$(getDotProfileFullPathFile)"
+
+		local gotoAliasPathRegex=$(createPrefixGotoPathRegex "alias")
+		local gotoSourcePathRegex=$(createPrefixGotoPathRegex "source")
 
 
-	isInstallFile=`ls | grep "run.sh"`
-
-
-	if [ $isInstallFile == "run.sh" ]; then
+		local aliasKey="goto"
 		installStartMessage
-
-
 		installType=`setInput 1`
 
-
-		if [ -z $installType ] || [ $installType -eq 1 ]; then
-
-			#~/.baschrc 추가 내용 중복 검사 및 소스 추가
-			checkExistBashrcAddSource "install"
-
-
-			#~/.profile 추가 내용 중복 검사 및 소스 추가
-
+		if [ -z $installType -o $installType -eq 1 ]; then
 			setProfileAddSourceMessage
-			checkExistProfileAddSource  "install" "$(setInput "goto")"
+			aliasKey=`setInput "goto"`
 
+			setShellrcRun "$shellrc" "$gotoSourcePathRegex"
+			setAslias "$shellrc" "$gotoAliasPathRegex" "$aliasKey"
+			setAslias "$profile" "$gotoAliasPathRegex" "$aliasKey"
 
-			echo /home/$USER > $thisPath/select
+			setRunPath "$currentPath"
+			update "$currentPath"/list $(getUserHomePath) $(getUserHomePath)
+			setSelect
 
-			source $profile
+			# echo $(getUserHomePath) >> $currentPath/list
+
+			completeMessage
 
 		elif [ $installType -eq 2 ]; then
-
-			checkExistBashrcAddSource "unInstall"
-			checkExistProfileAddSource  "unInstall"
-
-			source $profile
-
+			delete "$shellrc" "$gotoSourcePathRegex"
+			delete "$shellrc" "$gotoAliasPathRegex"
+			delete "$profile" "$gotoAliasPathRegex"
 			echo "
-			끝.
+			삭제 완료.
 			"
-
-
+			completeMessage
 		fi
 
 	echo "
-	version    : gotoWorkspace v0.1.3
+	version    : gotoWorkspace v0.2.1
 	developer  : TheName
-	github     : https://github.com/hgs-github/gotoWorkspace
+	github     : https://github.com/namugach/gotoWorkspace
 	"
 
 
