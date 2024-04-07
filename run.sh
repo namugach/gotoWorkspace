@@ -14,7 +14,7 @@
 
 
 ##############################전역변수
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
+currentPath=./
 
 list=$currentPath/list
 
@@ -604,13 +604,3 @@ main $1 $2 $3 $4 $5
 #version    : gotoWorkspace v0.2.1
 #developer  : namugach
 #github     : https://github.com/namugach/gotoWorkspace
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
-currentPath='/home/yeardream4/1.program/gotoWorkspace'
