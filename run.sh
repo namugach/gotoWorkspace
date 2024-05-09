@@ -23,6 +23,8 @@ selectValue=`cat $select`
 
 targetPath=""
 arrShowList=()
+# wsl의 경우 0
+rangeValue=1
 
 ##############################유틸리티
 
@@ -113,8 +115,8 @@ function listSelecter() {
 
 	elif [ `numberFilter $1` = true ]; then
 		# 성공했을 때
-		if [ ${#arrShowList[@]} -gt `expr $1 - 1` ]; then
-			local i=`expr $1`
+		if [ ${#arrShowList[@]} -gt `expr $1 - $rangeValue` ]; then
+			local i=`expr $1 - $rangeValue`
 			echo ${arrShowList[$i]}
 			return 2
 
@@ -378,7 +380,7 @@ function editList() {
 			else
 				local findArrListNum=`findArrList $2`
 				line
-				echo -e "${arrShowList[` expr $1`]} \n▽ (수정실패)▽ \n$2"
+				echo -e "${arrShowList[` expr $1 - $rangeValue`]} \n▽ (수정실패)▽ \n$2"
 				echo `expr $findArrListNum + 1` "번에 값이 존재함"
 				line
 				showList ${arrShowList[findArrListNum]}
