@@ -21,6 +21,13 @@ list=$currentPath/list
 select=$currentPath/select
 selectValue=`cat $select`
 
+# VERSION 파일에서 버전 읽기
+if [ -f "$currentPath/VERSION" ]; then
+    version=`cat $currentPath/VERSION`
+else
+    version="0.3.0"  # fallback
+fi
+
 targetPath=""
 arrShowList=()
 # wsl의 경우 0
@@ -585,7 +592,7 @@ function main() {
 			selectUseHelpMessage
 
 	echo "
-	version    : gotoWorkspace v0.2.1
+	version    : gotoWorkspace v$version
 	developer  : namugach
 	github     : https://github.com/namugach/gotoWorkspace
 	github의 README에 더 자세한 설명이 돼있어요 : )
@@ -608,6 +615,6 @@ main $1 $2 $3 $4 $5
 
 
 
-#version    : gotoWorkspace v0.2.1
+#version    : gotoWorkspace v$version
 #developer  : namugach
 #github     : https://github.com/namugach/gotoWorkspace
