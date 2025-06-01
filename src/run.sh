@@ -30,8 +30,12 @@ fi
 
 targetPath=""
 arrShowList=()
-# wsl의 경우 0
-rangeValue=1
+# Shell에 따른 배열 인덱스 보정
+if [ -n "$ZSH_VERSION" ]; then
+    rangeValue=0  # zsh: 배열 인덱스가 1부터 시작하므로 0으로 설정
+else
+    rangeValue=1  # bash: 배열 인덱스가 0부터 시작하므로 1로 설정
+fi
 
 ##############################유틸리티
 
@@ -119,17 +123,27 @@ function listSelecter() {
 		echo "삭제할 번호를 넣어주세요."
 		return 1
 
-
 	elif [ `numberFilter $1` = true ]; then
-		# 성공했을 때
-		if [ ${#arrShowList[@]} -gt `expr $1 - $rangeValue` ]; then
-			local i=`expr $1 - $rangeValue`
+		# 배열 크기 확인
+		local array_size=${#arrShowList[@]}
+		
+		# 입력된 번호가 유효한 범위인지 확인 (1부터 배열크기까지)
+		if [ $1 -ge 1 ] && [ $1 -le $array_size ]; then
+			# Shell별 배열 인덱스 계산
+			if [ -n "$ZSH_VERSION" ]; then
+				# zsh: 배열 인덱스가 1부터 시작
+				local i=$1
+			else
+				# bash: 배열 인덱스가 0부터 시작
+				local i=`expr $1 - 1`
+			fi
+			
 			echo ${arrShowList[$i]}
 			return 2
 
 		# 인자 값이 list의 엘리먼트 갯수보다 클 때
 		else
-			echo "list에 들어있는 최대 값은 ${#arrShowList[@]} 입니다."
+			echo "list에 들어있는 최대 값은 ${array_size} 입니다."
 			return 3
 		fi
 

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2024-06-02
+
+### 🔧 Fixed
+- **Cross-shell compatibility**: Fixed array indexing differences between bash and zsh
+- **Navigation accuracy**: `goto 4` now correctly goes to item 4 in both bash and zsh
+- **Array handling**: Improved `listSelecter` function with shell-specific index calculation
+
+### 🛠️ Technical Details
+- bash: Arrays start at index 0, so `goto 4` → `array[3]`
+- zsh: Arrays start at index 1, so `goto 4` → `array[4]`
+- Added shell detection in `listSelecter` function for proper index calculation
+
+---
+
 ## [0.3.0] - 2024-06-02
 
 ### 🚀 Major Improvements

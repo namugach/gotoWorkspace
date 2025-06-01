@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/dynamic/json?color=blue&label=version&query=.version&url=https://raw.githubusercontent.com/namugach/gotoWorkspace/main/src/VERSION&style=flat-square" alt="Version">
   </a>
   <a href="src/VERSION">
-    <img src="https://img.shields.io/badge/version-0.3.0-blue.svg?style=flat-square" alt="Version">
+    <img src="https://img.shields.io/badge/version-0.3.1-blue.svg?style=flat-square" alt="Version">
   </a>
   <img src="https://img.shields.io/badge/shell-bash%20%7C%20zsh-green.svg?style=flat-square" alt="Shell Support">
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS-lightgrey.svg?style=flat-square" alt="Platform">
